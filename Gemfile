@@ -20,11 +20,14 @@ gem 'jbuilder', '~> 2.7'
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'
 # Use Active Model has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
+gem 'bcrypt'
 
 # Bootstrap CSS
 gem 'bootstrap-sass'
 
+
+
+# PostgreSQL gem
 gem 'pg', '~> 1.2.3'
 
 # Use Active Storage variant
