@@ -20,10 +20,10 @@ module SessionsHelper
       user = User.find_by(id: user_id)
       if user && user.authenticated?(cookies[:remember_token])
         log_in user
-        #params[:session][:remember_me] == '1' ? remember(user) : forget(user)
-        #if params[:session][:remember_me] == '0' 
-        #  forget(user)
-        #end
+        params[:session][:remember_me] == '1' ? remember(user) : forget(user)
+        if params[:session][:remember_me] == '0' 
+          forget(user)
+        end
         @current_user = user
       end
     end
