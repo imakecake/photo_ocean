@@ -1,5 +1,6 @@
 class User < ApplicationRecord
-  attr_accessor :remember_token
+  attr_accessor :remember_token, :activation_token
+  before_create :create_activation_digest
   before_save { email.downcase! } # берет переменную экземпляра, применяет к ней downcase сохраняя изменения в той же переменной
   validates :name, presence: true, length: {maximum:45}
   #VALID_EMAIL_REGEX = /\A[^@]+@([^@\.]+\.)+[^@\.]+\z/ # Device?
@@ -33,13 +34,34 @@ class User < ApplicationRecord
   end
 
   # Возвращает true, если указанный токен соответствует дайджесту
-  def authenticated?(remember_token)
-    return false if remember_digest.nil?
-    BCrypt::Password.new(remember_digest).is_password?(remember_token)
+  def authenticated?(attribute, token)
+    digest = send("#{attribute}_digest")
+    return false if digest.nil?
+    BCrypt::Password.new(digest).is_password?(token)
   end
 
   # Забывает пользователя
   def forget
     update_attribute(:remember_digest, nil)
   end
+
+  # Активирует учетную запись
+  def activate
+    update_attribute(:activated, true)
+    update_attribute(:activated_at, Time.zone.now)
+  end
+
+  # Посылает письмо со ссылкой на стринцу активации 
+  def send_activation_email
+    UserMailer.account_activation(self).deliver_now    
+  end
+  
+  private
+    
+    # Создает и присваивает токен активации и его дайджест
+    def create_activation_digest
+      self.activation_token = User.new_token
+      self.activation_digest = User.digest(activation_token)
+    end
+
 end
