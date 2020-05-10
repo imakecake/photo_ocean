@@ -22,10 +22,15 @@ gem 'jbuilder', '~> 2.7'
 # Use Active Model has_secure_password
 gem 'bcrypt'
 
+# Allows to make sample users with semi-realistic names and email addresses
+gem 'faker'
+
 # Bootstrap CSS
 gem 'bootstrap-sass'
+gem 'bootstrap-will_paginate'
 
-
+# Paginate
+gem 'will_paginate'
 
 # PostgreSQL gem
 gem 'pg', '~> 1.2.3'

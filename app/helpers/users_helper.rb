@@ -1,7 +1,9 @@
 module UsersHelper
 
-  def avatar_for(user)
-    image_tag("cat_1.jpeg", alt: user.name, class: "avatar")
+  # Вовращает аватар для указанного пользователя
+  def avatar_for(user, options = { size: 80 })
+    size = options[:size]
+    image_tag("cat_1.jpeg", size: size, alt: user.name, class: "avatar")
   end
 
 end

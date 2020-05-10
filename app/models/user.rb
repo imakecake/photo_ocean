@@ -8,10 +8,11 @@ class User < ApplicationRecord
                     length: {maximum:255},  # ограничение длины в 255 символов (максимум для varchar в БД)
                     format: { with: VALID_EMAIL_REGEX }, # соответствие регулярке
                     uniqueness: { case_sensitive: false } # не чувствительное к регистру требование уникальности email 
-
+           
   has_secure_password
-  validates :password, length: {minimum: 6}
-
+  #validates :password, length: {minimum: 6}
+  validates :password, presence: true, length: {minimum: 6}, allow_blank: true
+  
   # Возвращает дайджест для указанной строки.
   def User.digest(string)
     cost = ActiveModel::SecurePassword.min_cost ? # тернарный оператор
