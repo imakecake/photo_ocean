@@ -66,9 +66,14 @@ class UserTest < ActiveSupport::TestCase
     @user.email = mixed_case_email
     @user.save
     assert_equal mixed_case_email.downcase, @user.reload.email
-    end
+  end
 
-    test "authenticated? should return false for a user with nil digest" do
-      assert_not @user.authenticated?(:remember, '')
-    end
+  test "authenticated? should return false for a user with nil digest" do
+    assert_not @user.authenticated?(:remember, '')
+  end
+
+  test "activated? should return false for a not activated user" do
+    assert_not @user.activated?
+  end
+
 end

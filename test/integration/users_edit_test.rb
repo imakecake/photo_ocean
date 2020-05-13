@@ -23,7 +23,9 @@ class UsersEditTest < ActionDispatch::IntegrationTest
     log_in_as(@user)
     assert_redirected_to edit_user_path(@user)
     assert_not session[:forwarding_url] # ссылка ff удаляется после перенаправления
-#!  #assert_template 'users/edit' # не понятно почему не работает и получает []
+    assert_response :redirect
+    follow_redirect!
+    assert_template 'users/edit'
     name = "Foo Bar"
     email = "foo@bar.com"
     patch user_path(@user), params: { user: { name: name,

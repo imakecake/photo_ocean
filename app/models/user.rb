@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-  attr_accessor :remember_token, :activation_token
+  attr_accessor :remember_token, :activation_token, :reset_token
   before_create :create_activation_digest
   before_save { email.downcase! } # берет переменную экземпляра, применяет к ней downcase сохраняя изменения в той же переменной
   validates :name, presence: true, length: {maximum:45}
@@ -47,8 +47,7 @@ class User < ApplicationRecord
 
   # Активирует учетную запись
   def activate
-    update_attribute(:activated, true)
-    update_attribute(:activated_at, Time.zone.now)
+    update_columns(activated: true, activated_at: Time.zone.now)
   end
 
   # Посылает письмо со ссылкой на стринцу активации 
@@ -56,6 +55,23 @@ class User < ApplicationRecord
     UserMailer.account_activation(self).deliver_now    
   end
   
+  # Устанавливает атрибуты для сброса пароля.
+  def create_reset_digest
+    self.reset_token = User.new_token
+    update_columns(reset_digest: User.digest(reset_token), 
+                   reset_sent_at: Time.zone.now)
+  end
+
+  # Посылает письмо со ссылкой на форму ввода нового пароля.
+  def send_password_reset_email
+    UserMailer.password_reset(self).deliver_now
+  end
+
+  # Возвращает true, если время для сброса пароля истекло.
+  def password_reset_expired?
+    reset_sent_at < 2.hours.ago
+  end
+
   private
     
     # Создает и присваивает токен активации и его дайджест

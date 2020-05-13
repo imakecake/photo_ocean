@@ -5,6 +5,7 @@ class UsersIndexTest < ActionDispatch::IntegrationTest
   def setup
     @admin = users(:testuser)
     @non_admin = users(:archer)
+    @bot = users(:robot)
   end
 
   test "index as admin including pagination and delete links" do
@@ -12,12 +13,12 @@ class UsersIndexTest < ActionDispatch::IntegrationTest
     get users_path
     assert_template 'users/index'
     assert_select 'div.pagination'
-    first_page_of_users = User.paginate(page: 1)
+    first_page_of_users = User.where(activated: true).paginate(page: 1)
     first_page_of_users.each do |user|
       assert_select 'a[href=?]', user_path(user), text: user.name
       unless user == @admin
         assert_select 'a[href=?]', user_path(user), text: 'delete',
-                                                    method: :delete
+                                                  method: :delete
       end
     end
     assert_difference "User.count", -1 do
@@ -31,6 +32,24 @@ class UsersIndexTest < ActionDispatch::IntegrationTest
     assert_template 'users/index'
     assert_select 'div.pagination'
     assert_select 'a', text: 'delete', count: 0
+  end
+
+  test "user_path for not activated user should redirect to root_url" do
+    get users_path
+    get user_path(@bot)
+    assert_response :redirect
+    follow_redirect!
+    assert_template 'static_pages/home'
+  end
+
+  test "index shouldn't show not activated users yet" do
+    get users_path
+    assert_template 'users/index'
+    assert_select 'div.pagination'
+    page_of_users = User.where(activated: true).paginate(page: 1)
+    page_of_users.each do |user|
+      assert_not_equal user_path(user), user_path(@bot) 
+    end
   end
 
 end
