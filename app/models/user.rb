@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  has_many :posts, dependent: :destroy
   attr_accessor :remember_token, :activation_token, :reset_token
   before_create :create_activation_digest
   before_save { email.downcase! } # берет переменную экземпляра, применяет к ней downcase сохраняя изменения в той же переменной
@@ -70,6 +71,12 @@ class User < ApplicationRecord
   # Возвращает true, если время для сброса пароля истекло.
   def password_reset_expired?
     reset_sent_at < 2.hours.ago
+  end
+
+  # Определяет прото-ленту.
+  # Полная реализация приводится в разделе "Следование за пользователями".
+  def feed
+    Post.where("user_id = ?", id)
   end
 
   private

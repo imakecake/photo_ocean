@@ -25,6 +25,8 @@ gem 'bcrypt'
 # Allows to make sample users with semi-realistic names and email addresses
 gem 'faker'
 
+# Allows to upload files 
+
 # Bootstrap CSS
 gem 'bootstrap-sass'
 gem 'bootstrap-will_paginate'
