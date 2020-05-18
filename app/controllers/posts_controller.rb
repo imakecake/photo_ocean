@@ -4,11 +4,12 @@ class PostsController < ApplicationController
   
   def create
     @post = current_user.posts.build(post_params)
+    @post.image.attach(params[:post][:image])
     if @post.save
       flash[:success] = "Post created!"
       redirect_to root_url
     else
-      @feed_items = [] # есть иной способ в главе 13.3.3
+      @feed_items = current_user.feed.paginate(page: params[:page])
       render 'static_pages/home'
     end
   end
@@ -22,7 +23,7 @@ class PostsController < ApplicationController
   private
 
     def post_params
-      params.require(:post).permit(:content)
+      params.require(:post).permit(:content, :image)
     end
 
     def correct_user

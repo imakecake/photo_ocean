@@ -25,7 +25,10 @@ gem 'bcrypt'
 # Allows to make sample users with semi-realistic names and email addresses
 gem 'faker'
 
-# Allows to upload files 
+# Allows to upload images with validation and resizing
+gem 'active_storage_validations'
+gem 'image_processing'
+gem 'mini_magick'
 
 # Bootstrap CSS
 gem 'bootstrap-sass'

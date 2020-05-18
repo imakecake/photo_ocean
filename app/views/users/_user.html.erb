@@ -1,5 +1,5 @@
 <li>
-  <%= avatar_for user, size: 80 %>
+  <%= link_to avatar_for(user, size: 80), user %>
   <%= link_to user.name, user %>
   <% if logged_in? && (current_user.admin? && !current_user?(user)) # Запрещает удалять самого себя %>
     | <%= link_to "delete", user, method: :delete,

@@ -1,5 +1,6 @@
 class User < ApplicationRecord
   has_many :posts, dependent: :destroy
+  has_one_attached :avatar # прикрепление аватара пользователю
   attr_accessor :remember_token, :activation_token, :reset_token
   before_create :create_activation_digest
   before_save { email.downcase! } # берет переменную экземпляра, применяет к ней downcase сохраняя изменения в той же переменной
@@ -14,6 +15,10 @@ class User < ApplicationRecord
   has_secure_password
   #validates :password, length: {minimum: 6}
   validates :password, presence: true, length: {minimum: 6}, allow_blank: true
+  validates :avatar, content_type: { in: %w[image/jpeg image/jpg image/gif image/png image/bmp],
+                                message: "must be a valid image format" },
+                      size: { less_than: 10.megabytes,
+                                message: "should be less than 10MB" }
   
   # Возвращает дайджест для указанной строки.
   def User.digest(string)
@@ -77,6 +82,10 @@ class User < ApplicationRecord
   # Полная реализация приводится в разделе "Следование за пользователями".
   def feed
     Post.where("user_id = ?", id)
+  end
+
+  def display_avatar
+    avatar.variant(resize_to_limit: [75, 75])
   end
 
   private
