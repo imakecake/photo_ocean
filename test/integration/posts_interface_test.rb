@@ -6,28 +6,30 @@ class PostsInterfaceTest < ActionDispatch::IntegrationTest
     @user = users(:testuser)
   end
 
-  test "post interface" do
+  test "post user interface" do
     log_in_as(@user) 
-    get root_path
-    assert_select 'div.pagination'
-    assert_select 'input[type=file]'
-    assert_select 'a[href=?]', '/?page=2' # Есть ссылка на вторую страницу
+    get user_path(@user)#user_path(@user)
+    assert_select 'div.pagination' #
+    #assert_select 'input[type=file]'
+    #assert_select 'a[href=?]', '/users/1?page=2' # Есть ссылка на вторую страницу
+    assert_select 'a', '2'
     # Недопустимая информация в форме.
     assert_no_difference 'Post.count' do
       post posts_path, params: { post: { content: "" } }
     end
     assert_select 'div#error_explanation'
-    #assert_select 'a[href=?]', '/?page=2' # Есть ссылка на вторую страницу posts?page=2
+    assert_select 'a[href=?]', '/posts?page=2' # Есть ссылка на вторую страницу ?page=2
     # Допустимая информация в форме.
-    content = "This post really ties the room together"
-    image = fixture_file_upload('test/fixtures/cat_1.jpeg', 'image/jpeg')
-    assert_difference 'Post.count', 1 do
-      post posts_path, params: { post: { content: content, image: image } }
-    end
-    assert assigns(:post).image.attached? #user_post
-    assert_redirected_to root_url 
-    follow_redirect!
-    assert_match content, response.body
+    content = "This post really ties the room together"                         #
+    image = fixture_file_upload('test/fixtures/cat_1.jpeg', 'image/jpeg')       #
+    assert_difference 'Post.count', 1 do                                        #
+      post posts_path, params: { post: { content: content, image: image } }     #
+    end                                                                         #
+    assert assigns(:post).image.attached? #user_post                           #
+    assert_redirected_to root_url                                               #
+    follow_redirect!  
+    get user_path(@user)                                                          #
+    assert_match content, response.body # - нет на руте т.к. на руте только подписки, а не собственные сообщения
     # Удаление сообщения.
     assert_select 'a', text: 'delete'
     first_post = @user.posts.paginate(page: 1).first
@@ -38,6 +40,40 @@ class PostsInterfaceTest < ActionDispatch::IntegrationTest
     get user_path(users(:archer))
     assert_select 'a', text: 'delete', count: 0
   end
+
+  test "post root interface" do
+    log_in_as(@user) 
+    get root_path#user_path(@user)
+    assert_select 'div.pagination' #
+    assert_select 'input[type=file]'
+    assert_select 'a[href=?]', '/?page=2' # Есть ссылка на вторую страницу
+    # Недопустимая информация в форме.
+    assert_no_difference 'Post.count' do
+      post posts_path, params: { post: { content: "" } }
+    end
+    assert_select 'div#error_explanation'
+    assert_select 'a[href=?]', '/posts?page=2' # Есть ссылка на вторую страницу ?page=2
+    # Допустимая информация в форме.
+    content = "This post really ties the room together"                         #
+    image = fixture_file_upload('test/fixtures/cat_1.jpeg', 'image/jpeg')       #
+    assert_difference 'Post.count', 1 do                                        #
+      post posts_path, params: { post: { content: content, image: image } }     #
+    end                                                                         #
+    #assert assigns(:post).image.attached? #user_post                           #
+    assert_redirected_to root_url                                               #
+    follow_redirect!                                                            #
+    #assert_match content, response.body # - нет на руте т.к. на руте только подписки, а не собственные сообщения
+    # Удаление сообщения.
+    #assert_select 'a', text: 'delete' # -"- (на руте нет собственных сообщений)
+    first_post = @user.posts.paginate(page: 1).first
+    assert_difference 'Post.count', -1 do
+      delete post_path(first_post)
+    end
+    # Переход в профиль другого пользователя.
+    get user_path(users(:archer))
+    assert_select 'a', text: 'delete', count: 0
+  end
+
 
   test "post sidebar count" do
     log_in_as(@user)

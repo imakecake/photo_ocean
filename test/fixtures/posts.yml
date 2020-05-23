@@ -20,7 +20,7 @@ most_recent:
   created_at: <%= Time.zone.now %>
   user: testuser
 
-<% 30.times do |n| %>
+<% 90.times do |n| %>
 post_<%= n %>:
   content: <%= Faker::Lorem.sentence(word_count: 5) %>
   created_at: <%= 42.days.ago %>
@@ -46,3 +46,10 @@ van:
   content: "Dude, this van's, like, rolling probable cause."
   created_at: <%= 4.hours.ago %>
   user: lana
+
+<% 30.times do |n| %>
+post_<%= n %>:
+  content: <%= Faker::Lorem.sentence(word_count: 5) %>
+  created_at: <%= 42.days.ago %>
+  user: lana
+<% end %>

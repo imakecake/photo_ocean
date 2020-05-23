@@ -28,15 +28,18 @@ class UsersEditTest < ActionDispatch::IntegrationTest
     assert_template 'users/edit'
     name = "Foo Bar"
     email = "foo@bar.com"
+    avatar = fixture_file_upload('test/fixtures/cat_1.jpeg', 'image/jpeg')
     patch user_path(@user), params: { user: { name: name,
                                               email: email,
                                               password: "",
-                                              password_confirmation: "" } }
+                                              password_confirmation: "",
+                                              avatar: avatar } }
     assert_not flash.empty?
     assert_redirected_to @user
     @user.reload
     assert_equal @user.name, name
     assert_equal @user.email, email
+    assert assigns(:user).avatar.attached?
   end
 
 end

@@ -1,5 +1,13 @@
 class User < ApplicationRecord
   has_many :posts, dependent: :destroy
+  has_many :active_relationships,  class_name: "Relationship",
+                                   foreign_key: "follower_id",
+                                   dependent: :destroy
+  has_many :passive_relationships, class_name: "Relationship",
+                                   foreign_key: "followed_id",
+                                   dependent: :destroy
+  has_many :following, through: :active_relationships,  source: :followed
+  has_many :followers, through: :passive_relationships, source: :follower # source тут просто для аналогии
   has_one_attached :avatar # прикрепление аватара пользователю
   attr_accessor :remember_token, :activation_token, :reset_token
   before_create :create_activation_digest
@@ -81,11 +89,29 @@ class User < ApplicationRecord
   # Определяет прото-ленту.
   # Полная реализация приводится в разделе "Следование за пользователями".
   def feed
-    Post.where("user_id = ?", id)
+    #Post.where("user_id = ?", id)
+    following_ids = "SELECT followed_id FROM relationships
+                                        WHERE follower_id = :user_id"
+    Post.where("user_id IN (#{following_ids})", user_id: id)
   end
 
   def display_avatar
     avatar.variant(resize_to_limit: [75, 75])
+  end
+
+  # Выполняет подписку на сообщения пользователя.
+  def follow(other_user)
+    active_relationships.create(followed_id: other_user.id)
+  end
+
+  # Отменяет подписку на сообщения пользователя.
+  def unfollow(other_user)
+    active_relationships.find_by(followed_id: other_user.id).destroy
+  end
+
+  # Возвращает true, если текущий пользователь читает другого пользователя.
+  def following?(other_user)
+    following.include?(other_user)
   end
 
   private
