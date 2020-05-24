@@ -6,7 +6,7 @@ module UsersHelper
     if user.avatar.attached?
       image_tag(user.display_avatar, size: size, alt: user.name, class: "avatar")
     else
-      image_tag("cat_1.jpeg", size: size, alt: user.name, class: "avatar")
+      image_tag("placeholders/user.svg", size: size, alt: user.name, class: "avatar")
     end
   end
 
