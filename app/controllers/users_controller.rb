@@ -9,12 +9,14 @@ class UsersController < ApplicationController
   end
 
   def new
+    redirect_to root_url and return if logged_in?
     @user = User.new
   end
   
   def show
     @user = User.find(params[:id])
     @posts = @user.posts.paginate(page: params[:page])
+    @post = current_user.posts.build if logged_in?
     redirect_to root_url and return unless @user.activated?
   end
 

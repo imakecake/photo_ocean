@@ -261,7 +261,7 @@ input {
 }
 
 /* Посты */
-.microposts {
+.posts {
   list-style: none;
   padding: 0;
   li {
@@ -288,6 +288,10 @@ input {
   color: $gray-light;
   display: block;
   margin-left: 60px;
+}
+
+.post_show{
+  color: $gray-light;
 }
 
 .avatar {

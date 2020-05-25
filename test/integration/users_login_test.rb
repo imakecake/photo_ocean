@@ -58,4 +58,12 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
     assert_empty cookies[:remember_token]
   end
 
+  test "try login when already logged in" do
+    log_in_as(@user)
+    get login_path
+    assert_redirected_to root_url
+    follow_redirect!
+    assert_template 'static_pages/home'
+  end
+
 end

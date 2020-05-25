@@ -70,5 +70,14 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
     assert_not flash.empty?
     assert is_logged_in?
   end
+
+  test "try signup when already logged in" do
+    user = users(:testuser)
+    log_in_as(user)
+    get signup_path
+    assert_redirected_to root_url
+    follow_redirect!
+    assert_template 'static_pages/home'
+  end
   
 end

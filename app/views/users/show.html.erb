@@ -6,13 +6,15 @@
         <%= avatar_for @user %>
         <%= @user.name %>
       </h1>
-      <!--<h3 align = "center">
-        <%= @user.email %>
-      </h3>-->
     </section>
-      <section class="stats">
-        <%= render 'shared/stats' %>
+    <section class="stats">
+      <%= render 'shared/stats' %>
+    </section>
+    <% if current_user?(@user) %>
+      <section class="post_form">
+        <%= render 'shared/post_form'%>
       </section>
+    <% end %>
   </aside>
   <div class="col-md-8">
     <%= render 'follow_form' if logged_in? %>
