@@ -18,6 +18,8 @@ class UsersController < ApplicationController
     @posts = @user.posts.paginate(page: params[:page])
     @post = current_user.posts.build if logged_in?
     redirect_to root_url and return unless @user.activated?
+    rescue ActiveRecord::RecordNotFound
+      redirect_to request.referrer || current_user || root_url
   end
 
   def create
@@ -80,6 +82,8 @@ class UsersController < ApplicationController
     def correct_user
       @user = User.find(params[:id])
       redirect_to(root_url) unless current_user?(@user)
+      rescue ActiveRecord::RecordNotFound
+        redirect_to request.referrer || current_user || root_url
     end
 
     def admin_user
