@@ -5,8 +5,9 @@
     <%= image_tag post.display_image if post.image.attached? %>
     <%= post.content %></span>
   <span class="timestamp">
-  <%= link_to "
-    Posted #{time_ago_in_words(post.created_at)} ago.", post, class: "post_show" %>
+    <%= link_to "Posted #{time_ago_in_words(post.created_at)} ago.", post, 
+                                                      class: "post_show" %> | 
+    <%= link_to "Comments #{post.comments.count}", post, class: "post_show" %>
     <% if current_user?(post.user) %> 
       <%= link_to "delete", post, method: :delete,
                                   data: { confirm: "You sure?" } %>

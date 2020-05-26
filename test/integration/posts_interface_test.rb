@@ -70,9 +70,15 @@ class PostsInterfaceTest < ActionDispatch::IntegrationTest
       assert_select 'a[href=?]', "/posts/#{post.id}"
     end
     # Проверка страницы поста
-    post = @user.posts.first
+    post = @user.posts.last
     get post_path(post)
     assert_match post.content, response.body
+    assert_match post.comments.count.to_s, response.body
+    #assert_select 'div.pagination'
+    #assert_select 'a[href=?]', "/posts/#{post.id}?page=2" # Есть ссылка на вторую страницу
+    post.comments.paginate(page: 1).each do |comment|
+      assert_match comment.content, response.body
+    end
     # Попытка удаления поста кем угодно, кроме владельца
     assert_select 'a', text: 'delete', count: 0
     assert_no_difference 'Post.count' do

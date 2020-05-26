@@ -41,3 +41,12 @@ following = users[2..50] # 3 - 51
 followers = users[3..40] # 4 - 41
 following.each { |followed| user.follow(followed) }
 followers.each { |follower| follower.follow(user) }
+
+# Комментарии
+posts = Post.take(5)
+50.times do
+  content = Faker::Lorem.sentence(word_count: 5)
+  posts.each do |post| 
+    post.comments.create!(content: content, user_id: 1)
+  end
+end

@@ -1,0 +1,15 @@
+<li id="comment-<%= comment.id %>">
+  <%= link_to avatar_for(comment.user, size: 50), comment.user %>
+  <span class="user"><%= link_to comment.user.name, comment.user %></span>
+  <span class="content">
+    <%= image_tag comment.display_image if comment.image.attached? %>
+    <%= comment.content %></span>
+  <span class="timestamp">
+  <% %>
+    Commented <%= time_ago_in_words(comment.created_at) %> ago.
+    <% if current_user?(comment.user) %> 
+      <%= link_to "delete", [comment.post, comment], method: :delete,
+                                  data: { confirm: "You sure?" } %>
+    <% end %>
+  </span>
+</li>

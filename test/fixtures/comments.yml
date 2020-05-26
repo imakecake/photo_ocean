@@ -1,0 +1,21 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+story:
+  content: "I just ate an orange!"
+  created_at: <%= 10.minutes.ago %>
+  user: testuser
+  post: 1
+
+<% 90.times do |n| %>
+post_<%= n %>:
+  content: <%= Faker::Lorem.sentence(word_count: 5) %>
+  created_at: <%= 42.days.ago %>
+  user: testuser
+  post: 1
+<% end %>
+
+tigers:
+  content: "Oh, is that what you want? Because that's how you get tigers!"
+  created_at: <%= 2.years.ago %>
+  user: archer
+  post: 1

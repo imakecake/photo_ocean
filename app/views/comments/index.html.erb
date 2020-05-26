@@ -19,7 +19,7 @@
 <% end %>
 <% if @post.comments.any? %>
   <ul class="posts">
-    <%= render @comments %>
+    <%= render @items %>
   </ul>
-  <%= will_paginate @comments %>
+  <%= will_paginate @items %>
 <% end %>

@@ -30,4 +30,13 @@ class PostTest < ActiveSupport::TestCase
     assert_equal Post.first, posts(:most_recent)
   end
 
+  test "associated comments should be destroyed" do
+    @post.save
+    @comment = @user.comments.build(content: "Lorem ipsum")
+    @comment.post = @post
+    #assert_difference 'Comment.count', -1 do
+    #  @post.destroy
+    #end
+  end
+
 end

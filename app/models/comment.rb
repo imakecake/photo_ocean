@@ -1,10 +1,10 @@
-class Post < ApplicationRecord
+class Comment < ApplicationRecord
   belongs_to :user
-  has_many :comments, dependent: :destroy
+  belongs_to :post
   has_one_attached :image
-  default_scope -> { order(created_at: :desc) }
+  validates :post_id, presence: true
   validates :user_id, presence: true
-  validates :content, presence: true #, length: { maximum: 255 }
+  validates :content, presence: true
   validates :image, content_type: { in: %w[image/jpeg image/jpg image/gif image/png image/bmp], # [:jpeg, :jpg, :png, :gif, :bmp],
                                     message: "must be a valid image format" },
                     size: { less_than: 10.megabytes,  

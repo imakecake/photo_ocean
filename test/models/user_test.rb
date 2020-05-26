@@ -112,4 +112,16 @@ class UserTest < ActiveSupport::TestCase
       assert_not testuser.feed.include?(post_unfollowed)
     end
   end
+
+  test "associated comments should be destroyed" do
+    @user.save
+    @comment = @user.comments.build(content: "Lorem ipsum")
+    @comment.post = @user.posts.first
+    #assert_difference 'Comment.count', -1 do
+    #  @user.destroy
+    #end
+  end
+
+
+
 end
