@@ -1,3 +1,6 @@
 - if @feed_items.any?
   %ol.posts= render @feed_items
   = will_paginate @feed_items
+- else
+  %div 
+    No posts to feed. Just subsribe to someone to see their posts
