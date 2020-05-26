@@ -18,11 +18,11 @@ class SiteLayoutTest < ActionDispatch::IntegrationTest
     assert_select "a[href=?]", about_path
     assert_select "a[href=?]", contact_path
     assert_select "a[href=?]", login_path
-    assert_select "a[href=?]", signup_path
+    assert_select "a[href=?]", new_user_path
   end
 
   test "not logged in user should get sign up" do
-    get signup_path
+    get new_user_path
     assert_response :success
     assert_template 'users/new'
     assert_select "title", "Sign up | #{@base_title}"
@@ -34,7 +34,7 @@ class SiteLayoutTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_template 'sessions/new'
     assert_select "title", "Log in | #{@base_title}"
-    assert_select "a[href=?]", signup_path, count: 2
+    assert_select "a[href=?]", new_user_path, count: 2
   end
 
   test "not logged in user should get users" do
@@ -86,10 +86,10 @@ class SiteLayoutTest < ActionDispatch::IntegrationTest
     assert_select 'div.pagination'
     assert_select "title", "All users | #{@base_title}"
   end
-=begin 
+
   test "logged in user shouldn't get sign up" do
     log_in_as(@user)
-    get signup_path
+    get new_user_path
     assert_response :redirect
     follow_redirect!
     assert_template 'static_pages/home'
@@ -104,7 +104,7 @@ class SiteLayoutTest < ActionDispatch::IntegrationTest
     assert_template 'static_pages/home'
     assert_select "title", "#{@base_title}"
   end
-=end
+
   test "logged in user should get profile link" do
     log_in_as(@user)
     get root_path

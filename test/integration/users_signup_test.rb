@@ -8,7 +8,7 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
 
   test "invalid signup information" do
     # Пустые поля / Empty fields
-    get signup_path
+    get new_user_path
     assert_no_difference 'User.count' do
       post users_path, params: { user: { name: "",
                               email: "",
@@ -26,7 +26,7 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
     #assert_select 'li', "Password is too short (minimum is 6 characters)"
 
     # Не верные данные / invalid information
-    get signup_path
+    get new_user_path
     assert_no_difference 'User.count' do
       post users_path, params: { user: { name: "",
                               email: "user@invalid",
@@ -43,7 +43,7 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
   end
 
   test "valid signup information with account activation" do
-    get signup_path
+    get new_user_path
     assert_difference 'User.count', 1 do
       post users_path, params: { user: { name: "Example User",
                                             email: "user@example.com",
@@ -74,7 +74,7 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
   test "try signup when already logged in" do
     user = users(:testuser)
     log_in_as(user)
-    get signup_path
+    get new_user_path
     assert_redirected_to root_url
     follow_redirect!
     assert_template 'static_pages/home'
