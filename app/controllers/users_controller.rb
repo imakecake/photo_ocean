@@ -26,7 +26,7 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     @user.avatar.attach(params[:avatar])
     if @user.save
-      @user.send_activation_email
+      #@user.send_activation_email
       flash[:info] = "Please check your email to activate your account."
       #redirect_to root_url
       # Только до тех пор пока не работает отправка email
