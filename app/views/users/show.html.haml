@@ -1,0 +1,17 @@
+- provide(:title, @user.name)
+.row
+  %aside.col-md-4
+    %section.user_info
+      %h1
+        = avatar_for @user
+        = @user.name
+    %section.stats= render 'shared/stats'
+    - if current_user?(@user)
+      %section.post_form= render 'shared/post_form'
+  .col-md-8
+    = render 'follow_form' if logged_in?
+    %h3
+      Posts (#{@user.posts.count})
+    - if @user.posts.any?
+      %ol.posts= render @posts
+      = will_paginate @posts

@@ -53,12 +53,19 @@ guard :minitest, spring: "bin/rails test", all_on_start: false do
   watch(%r{^app/controllers/(.*?)_controller\.rb$}) do |matches|
   resource_tests(matches[1])
   end
+  watch(%r{^app/views/([^/]*?)/.*\.html\.haml$}) do |matches|
+    ["test/controllers/#{matches[1]}_controller_test.rb"] +
+    integration_tests(matches[1])
+  end
   watch(%r{^app/views/([^/]*?)/.*\.html\.erb$}) do |matches|
     ["test/controllers/#{matches[1]}_controller_test.rb"] +
     integration_tests(matches[1])
   end
   watch(%r{^app/helpers/(.*?)_helper\.rb$}) do |matches|
     integration_tests(matches[1])
+  end
+  watch('app/views/layouts/application.html.haml') do
+    'test/integration/site_layout_test.rb'
   end
   watch('app/views/layouts/application.html.erb') do
     'test/integration/site_layout_test.rb'

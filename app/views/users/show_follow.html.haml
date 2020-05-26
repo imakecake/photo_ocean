@@ -1,0 +1,21 @@
+- provide(:title, @title)
+.row
+  %aside.col-md-4
+    %section.user_info
+      = avatar_for @user
+      %h1= @user.name
+      %span= link_to "view profile", @user
+      %span
+        %b Posts:
+        = @user.posts.count
+    %section.stats
+      = render 'shared/stats'
+      - if @users.any?
+        .user_avatars
+          - @users.each do |user|
+            = link_to avatar_for(user, size: 30), user
+  .col-md-8
+    %h3= @title
+    - if @users.any?
+      %ul.users.follow= render @users
+      = will_paginate

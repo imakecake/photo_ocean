@@ -28,7 +28,13 @@ class UsersController < ApplicationController
     if @user.save
       @user.send_activation_email
       flash[:info] = "Please check your email to activate your account."
-      redirect_to root_url
+      #redirect_to root_url
+      # Только до тех пор пока не работает отправка email
+        @user.activate
+        log_in @user
+        flash[:success] = "Welcome to Photo Ocean! Your account successfully activated!"
+        redirect_to @user
+      # -----------------------------------------------------------------------
     else
       render 'new'
     end

@@ -1,0 +1,14 @@
+%li{:id => "post-#{post.id}"}
+  = link_to avatar_for(post.user, size: 50), post.user
+  %span.user= link_to post.user.name, post.user
+  %span.content
+    = image_tag post.display_image if post.image.attached?
+    = post.content
+  %span.timestamp
+    = link_to "Posted #{time_ago_in_words(post.created_at)} ago.", post, |
+      class: "post_show"                                                 |
+    |
+    \#{link_to "Comments #{post.comments.count}", post, class: "post_show"}
+    - if current_user?(post.user)
+      = link_to "delete", post, method: :delete, |
+        data: { confirm: "You sure?" }           |

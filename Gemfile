@@ -23,6 +23,9 @@ gem 'bcrypt', '3.1.13'
 # Allows to make sample users with semi-realistic names and email addresses
 gem 'faker', '2.11.0'
 
+# Allows haml
+gem 'hamlit', '~> 2.11'
+
 # Allows to upload images with validation and resizing
 gem 'active_storage_validations', '0.8.9'
 gem 'image_processing', '1.11.0'

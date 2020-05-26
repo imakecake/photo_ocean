@@ -1,0 +1,17 @@
+= link_to avatar_for(@post.user, size: 50), @post.user
+%span.user= link_to @post.user.name, @post.user
+%span.content
+  = image_tag @post.display_image if @post.image.attached?
+  = @post.content
+%span.timestamp
+  Posted #{time_ago_in_words(@post.created_at)} ago.
+  - if current_user?(@post.user)
+    = link_to "delete", @post, method: :delete, |
+      data: { confirm: "You sure?" }            |
+%h3
+  Comments (#{@post.comments.count})
+- if logged_in?
+  %section.comment_form= render 'shared/comment_form'
+- if @post.comments.any?
+  %ul.posts= render @comments
+  = will_paginate @comments

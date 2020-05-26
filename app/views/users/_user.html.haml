@@ -1,0 +1,15 @@
+%li
+  = link_to avatar_for(user, size: 80), user
+  = link_to user.name, user
+  - if logged_in? && (current_user.admin? && !current_user?(user)) # Запрещает удалять самого себя
+    | #{link_to "delete", user, method: :delete, data: { confirm: "You sure to delete #{user.name}?" }}
+/
+  Эксперимент с табличным представлением пользователей
+/  %div
+/    = avatar_for user, size: 150
+/    %br/
+/    = link_to user.name, user
+/    = link_to avatar_for(user, size: 150), user
+/    %a{:href => "users/#{user[:id]}"}
+/      = avatar_for user, size: 50
+/      = user.name
