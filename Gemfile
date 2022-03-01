@@ -28,7 +28,7 @@ gem 'hamlit', '~> 2.11'
 
 # Allows to upload images with validation and resizing
 gem 'active_storage_validations', '0.8.9'
-gem 'image_processing', '1.11.0'
+gem 'image_processing', '1.12.2'
 gem 'mini_magick', '4.10.1'
 
 # Bootstrap CSS
